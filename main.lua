@@ -12,7 +12,13 @@ display.setDefault( "anchorX", 0.0 )	-- default to TopLeft anchor point for new 
 display.setDefault( "anchorY", 0.0 )
 
 local myfont = bmf2.loadFont( 'bmGlyphArial' )
-local string = bmf2.newString(myfont, "VATebmGlyph and Corona\ngraphics 2.0\nunicode support\nйцу\néçàà")
+local suffix
+if display.imageSuffix == nil then
+	suffix = ""
+else
+	suffix = display.imageSuffix
+end
+local string = bmf2.newString(myfont, "VATebmGlyph and Corona\ngraphics 2.0\nunicode support\nйцу\néçàà\nimage suffix:"..suffix.." scale:"..display.contentScaleX)
 
 local counter = 0;
 local counterString = bmf2.newString(myfont, "@" .. tostring(counter))

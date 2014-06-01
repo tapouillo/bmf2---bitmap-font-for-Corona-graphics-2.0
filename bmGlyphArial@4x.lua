@@ -1,8 +1,8 @@
 local sheetData = {}
 
 sheetData.info = {}
-sheetData.info.lineHeight = 103
-sheetData.info.base = 83
+sheetData.info.lineHeight = 104
+sheetData.info.base = 91
 sheetData.info.fontface = "Arial"
 
 sheetData.frames = {

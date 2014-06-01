@@ -9,7 +9,13 @@ local utf8 = require('bmf_utf8')
 
 --
 function loadFont( fntFile )
-	local fontDef = require(fntFile)
+	local suffix
+	if display.imageSuffix == nil then
+		suffix = ""
+	else
+		suffix = display.imageSuffix
+	end
+	local fontDef = require(fntFile..suffix)
 	local options =
 	{
 		frames = fontDef.frames,
@@ -125,15 +131,15 @@ function newString( font, text )
 		local last = 0; local xMax = 0; local yMax = 0
 		local unicode = 0
 		if t.raw_font then
-			if display.contentScaleX == .5 then 
-				t.raw_font.info.lineHeight = t.raw_font.info.lineHeight /2
-			end
+			--if display.contentScaleX == .5 then 
+			--	t.raw_font.info.lineHeight = t.raw_font.info.lineHeight /2
+			--end
 		
 			for i, c, b in utf8.chars(t.raw_text) do
    				unicode = utf8.unicodeValue(c)
 				if c == '\n' then
 					x = 0; 
-					y = y + t.raw_font.info.lineHeight
+					y = y + t.raw_font.info.lineHeight *display.contentScaleX
 					if y >= yMax then
 						yMax = y
 					end
@@ -156,29 +162,32 @@ function newString( font, text )
 						--print ("k: "..tostring(last) ..",".. tostring(unicode))
 						if t.raw_font.kernings[ tostring(last) ..",".. tostring(unicode) ] then
 							--print "kern"
-							x = x + font.kernings[ tostring(last) ..",".. tostring(unicode)  ]
+							x = x + font.kernings[ tostring(last) ..",".. tostring(unicode)  ] * display.contentScaleX
 						end
 						end
-						if display.contentScaleX == .5 then --scale the highres spritesheet if you're on a retina device.
+						--print (display.contentScaleX .." " ..letter.width)
+						letter.width = letter.width*display.contentScaleX
+						letter.height = letter.height*display.contentScaleY
+						--if display.contentScaleX == .5 then --scale the highres spritesheet if you're on a retina device.
 						
-							letter.xScale = .5
-							letter.yScale = .5
-							letter.x = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xoffset/2 + x
-							letter.y = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].yoffset/2 - t.raw_font.info.base + y
-						else
-							letter.x = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xoffset + x
-						    letter.y = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].yoffset - t.raw_font.info.base + y
-						end
+						--	letter.xScale = .5
+						--	letter.yScale = .5
+						--	letter.x = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xoffset/2 + x
+						--	letter.y = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].yoffset/2 - t.raw_font.info.base + y
+						--else
+							letter.x = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xoffset *display.contentScaleX + x
+						    letter.y = t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].yoffset *display.contentScaleX - t.raw_font.info.base + y
+						--end
 						
 						t:insert( letter )
 						last = unicode
 					end
 					
-					if display.contentScaleX == .5 then 
-						x = x + t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xadvance/2
-					else
-						x = x + t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xadvance
-					end
+					--if display.contentScaleX == .5 then 
+					--	x = x + t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xadvance/2
+					--else
+						x = x + t.raw_font.frames[ sheetIndexForChar(t.raw_font,unicode) ].xadvance *display.contentScaleX
+					--end
 					if x >= xMax then
 						xMax = x
 					end
