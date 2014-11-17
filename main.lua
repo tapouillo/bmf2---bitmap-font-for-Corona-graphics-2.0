@@ -35,3 +35,11 @@ local function increaseCounter()
 end
 
 timer.performWithDelay( 1000, increaseCounter, -1)
+
+
+--
+
+local myfont2 = bmf2.loadFont('bangers')
+local string2 = bmf2.newString(myfont2,"bangers font")
+string2.x = 50
+string2.y = 200

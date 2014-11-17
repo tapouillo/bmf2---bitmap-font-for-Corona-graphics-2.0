@@ -24,7 +24,12 @@ function loadFont( fntFile )
 	local newFont ={}
 	newFont.sheet = fontSheet
 	newFont.mapping = fontDef.mapping
-	newFont.kernings = fontDef.kernings
+	if fontDef.kernings then
+		newFont.kernings = fontDef.kernings
+	else
+		newFont.kernings = {}
+	end
+	
 	newFont.frames = fontDef.frames
 	newFont.info = fontDef.info
   	return newFont
